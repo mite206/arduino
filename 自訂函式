@@ -1,0 +1,46 @@
+int beep = 13;
+/*void beepgo() {
+  digitalWrite(beep,HIGH);
+  delay(200);
+  digitalWrite(beep,LOW);
+  delay(200);
+}
+自訂函式正確位置
+*/
+void setup() {
+pinMode(beep,OUTPUT); // put your setup code here, to run once:
+Serial.begin(9600);
+}
+/*void beepgo() {
+  digitalWrite(beep,HIGH);
+  delay(200);
+  digitalWrite(beep,LOW);
+  delay(200);
+}
+自訂函式正確位置
+*/
+
+
+void loop() {
+  beepgoto(5);// 自訂函式，輸入次數
+  Serial.println("stop");
+}
+
+
+//自訂函數，閃一次
+void beepgo() {
+  digitalWrite(beep,HIGH);
+  delay(2000);
+  digitalWrite(beep,LOW);
+  delay(2000);
+  Serial.println("beep   beep");
+}
+
+
+//自訂函數，beepgoto(可以設定次數)
+void beepgoto(int bb){
+  for(int bee = 0 ;bee < bb ; bee++){
+  beepgo();
+   }
+  }
+  
