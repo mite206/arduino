@@ -14,6 +14,12 @@ OneWire oneWire(ONE_WIRE_BUS);
 // Pass our oneWire reference to Dallas Temperature.
 DallasTemperature sensors(&oneWire);
 LiquidCrystal_I2C lcd(0x27,16,2);  //這一行要記得輸入，0*27是I2C的位置，後面是LCD的規格
+
+//加入蜂鳴器
+int beep = 13;
+int temp = 0;
+
+
 void setup(void)
 {
   // start serial port
@@ -24,7 +30,9 @@ void setup(void)
   sensors.begin();
   lcd.init();//初始化lcd
   lcd.backlight();
-  lcd.print("temperature");    
+  lcd.print("temperature");
+    
+   pinMode(beep,OUTPUT);  //蜂鳴器腳位設定輸出        
 }
  
  
@@ -56,5 +64,22 @@ void loop()
        lcd.print(vol);
        temp=vol;
        delay(1000);
+    }
+}
+
+
+//副程式---------------------
+//beebee()輸出一次
+void beebee (){
+    digitalWrite(beep,HIGH);
+    delay(500);
+    digitalWrite(beep,LOW);
+    delay(500);
+}
+
+//beego(數字 )  ,設定次數
+void beego(int nul){
+    for(int conn = 0 ; conn < nul ; conn ++){
+        beebee();
     }
 }
