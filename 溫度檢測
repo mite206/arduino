@@ -17,7 +17,7 @@ LiquidCrystal_I2C lcd(0x27,16,2);  //這一行要記得輸入，0*27是I2C的位
 
 //加入蜂鳴器
 int beep = 13;
-int temp = 0;
+float temp = 0;
 
 
 void setup(void)
