@@ -1,0 +1,69 @@
+//測試成功---------
+//連接1602 lcd
+//溫度及電壓測量
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#include <LiquidCrystal_I2C.h>
+#include <Wire.h>
+// Data wire is plugged into pin 2 on the Arduino
+#define ONE_WIRE_BUS 2
+float temp ;
+// Setup a oneWire instance to communicate with any OneWire devices 
+// (not just Maxim/Dallas temperature ICs)
+OneWire oneWire(ONE_WIRE_BUS);
+ 
+// Pass our oneWire reference to Dallas Temperature.
+DallasTemperature sensors(&oneWire);
+LiquidCrystal_I2C lcd(0x27,16,2);  //這一行要記得輸入，0*27是I2C的位置，後面是LCD的規格
+void setup(void)
+{
+  // start serial port
+  Serial.begin(9600);
+  Serial.println("Dallas Temperature IC Control Library Demo");
+
+  // Start up the library
+  sensors.begin();
+  lcd.init();//初始化lcd
+  lcd.backlight();
+  lcd.print("temperature");    
+}
+ 
+ 
+void loop()
+{
+  // call sensors.requestTemperatures() to issue a global temperature
+  // request to all devices on the bus
+  Serial.print(" Requesting temperatures...");
+  sensors.requestTemperatures(); // Send the command to get temperatures
+  Serial.println("DONE");
+
+  Serial.print("Temperature is: ");
+  Serial.println(sensors.getTempCByIndex(0)); // Why "byIndex"? 
+    // You can have more than one IC on the same bus. 
+    // 0 refers to the first IC on the 
+    lcd.setCursor(0,0);
+    lcd.print("temperature");
+    delay(500);
+    lcd.clear();
+    lcd.setCursor(0,1);
+    lcd.print(sensors.getTempCByIndex(0));
+    lcd.setCursor(6,1);
+    lcd.write(0xdf);//lcd.write(data)可以顯示16進制，0xdf為度c的小0
+    lcd.setCursor(7,1);
+    lcd.write(0x43);//lcd.write(data)可以顯示16進制，0xdf為度c的c
+
+    
+    int v1=analogRead(A0);
+    float vol=v1*(5.0/1023.0);
+    Serial.println(vol);
+    lcd.setCursor(15,1);
+    lcd.print("V");
+    if (vol==temp){
+     temp=vol;   
+    }else{
+       lcd.setCursor(11,1);
+       lcd.print(vol);
+       temp=vol;
+       delay(500);
+    }
+}
